@@ -1,11 +1,10 @@
 const AWS = require('aws-sdk');
-const dynamodb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 
 AWS.config.update({
-    region: 'us-east-2',
-    endpoint: 'https://localhost:8000'
+  region: "us-east-2",
+  endpoint: "http://localhost:8000"
 });
-
+const dynamodb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 
 const params = {
     TableName : "Thoughts",
@@ -22,3 +21,11 @@ const params = {
       WriteCapacityUnits: 10
     }
   };
+
+  dynamodb.createTable(params, (err, data) => {
+    if (err){
+      console.log('Unable to create table. Error JSON:', JSON.stringify(err, null, 2));
+    } else {
+      console.log('Created table. Table description JSON:', JSON.stringify(data, null, 2));
+    }
+  })
