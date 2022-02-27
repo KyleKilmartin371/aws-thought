@@ -10,6 +10,7 @@ AWS.config.update(awsConfig);
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 const table = "Thoughts";
 
+//get user
 router.get("/users", (req, res) => {
   const params = {
     TableName: table,
@@ -42,10 +43,31 @@ router.get('/users/:username', (req, res) => {
   dynamodb.query(params, (err, data) => {
     if (err) {
       console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
-      res.status(500).json(err); // an error occurred
+      res.status(500).json(err);
     } else {
       console.log("Query succeeded.");
       res.json(data.Items)
+    }
+  });
+});
+
+// Create new user
+router.post('/users', (req, res) => {
+  const params = {
+    TableName: table,
+    Item: {
+      "username": req.body.username,
+      "createdAt": Date.now(),
+      "thought": req.body.thought
+    }
+  };
+  dynamodb.put(params, (err, data) => {
+    if (err) {
+      console.error("Unable to add item. Error JSON:", JSON.stringify(err, null, 2));
+      res.status(500).json(err);
+    } else {
+      console.log("Added item:", JSON.stringify(data, null, 2));
+      res.json({"Added": JSON.stringify(data, null, 2)});
     }
   });
 });
