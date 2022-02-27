@@ -20,5 +20,13 @@
   },
   "devDependencies": {
     "concurrently": "^5.1.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KyleKilmartin371/aws-thought.git"
+  },
+  "bugs": {
+    "url": "https://github.com/KyleKilmartin371/aws-thought/issues"
+  },
+  "homepage": "https://github.com/KyleKilmartin371/aws-thought#readme"
 }
