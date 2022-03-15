@@ -3,8 +3,7 @@ const router = express.Router();
 
 const AWS = require("aws-sdk");
 const awsConfig = {
-  region: "us-east-2",
-  endpoint: "http://localhost:8000",
+  region: "us-east-2"
 };
 AWS.config.update(awsConfig);
 const dynamodb = new AWS.DynamoDB.DocumentClient();
@@ -29,24 +28,26 @@ router.get('/users/:username', (req, res) => {
   console.log(`Querying for thought(s) from ${req.params.username}.`);
   const params = {
     TableName: table,
-    ProjectionExpression: "#th, #ca",
-    KeyConditionExpression: "#un = :user",
+    ProjectionExpression: '#th, #ca',
+    KeyConditionExpression: '#un = :user',
     ExpressionAttributeNames: {
-      "#un": "username",
-      "#ca": "createdAt",
-      "#th": "thought"
+      '#un': 'username',
+      '#ca': 'createdAt',
+      '#th': 'thought',
     },
     ExpressionAttributeValues: {
-      ":user": req.params.username
-    }
+      ':user': req.params.username,
+    },
+    ProjectionExpression: '#th, #ca',
+    ScanIndexForward: false,
   };
   dynamodb.query(params, (err, data) => {
     if (err) {
-      console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
-      res.status(500).json(err);
+      console.error('Unable to query. Error:', JSON.stringify(err, null, 2));
+      res.status(500).json(err); // an error occurred
     } else {
-      console.log("Query succeeded.");
-      res.json(data.Items)
+      console.log('Query succeeded.');
+      res.json(data.Items);
     }
   });
 });
@@ -56,10 +57,10 @@ router.post('/users', (req, res) => {
   const params = {
     TableName: table,
     Item: {
-      "username": req.body.username,
-      "createdAt": Date.now(),
-      "thought": req.body.thought
-    }
+      username: req.body.username,
+      createdAt: Date.now(),
+      thought: req.body.thought
+    },
   };
   dynamodb.put(params, (err, data) => {
     if (err) {
